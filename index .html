@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Venezuela</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body { background:#0a0a0a; color:white; font-family:Arial; text-align:center; padding:20px; }
+    #startScreen { display:block; }
+    #quizScreen { display:none; }
+    button {
+        padding:15px 25px;
+        background:#ff0033;
+        border:none;
+        color:white;
+        font-size:22px;
+        border-radius:12px;
+        margin-top:20px;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="startScreen">
+    <h1>Quiz Venezuela</h1>
+    <button onclick="startQuiz()">COMEÇAR</button>
+</div>
+
+<div id="quizScreen">
+    <h2 id="timer">Tempo: 15</h2>
+    <h2 id="question"></h2>
+    <div id="options"></div>
+</div>
+
+<script>
+let time = 15;
+let timerInterval;
+const questions = [
+    {q:"Quem iniciou a Revolução Bolivariana?", opts:["Guaidó","Chávez","Maduro","Correa"], ans:1},
+    {q:"Ano que Chávez assumiu presidência?", opts:["1989","1995","1998","2004"], ans:2}
+];
+let index = 0;
+
+function startQuiz(){
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("quizScreen").style.display = "block";
+    loadQuestion();
+}
+
+function loadQuestion(){
+    time = 15;
+    document.getElementById("timer").innerText = "Tempo: " + time;
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(()=>{
+        time--;
+        document.getElementById("timer").innerText = "Tempo: " + time;
+        if(time <= 0){ clearInterval(timerInterval); next(); }
+    },1000);
+
+    let q = questions[index];
+    document.getElementById("question").innerText = q.q;
+
+    let optDiv = document.getElementById("options");
+    optDiv.innerHTML = "";
+
+    q.opts.forEach((o,i)=>{
+        let btn = document.createElement("button");
+        btn.innerText = o;
+        btn.onclick = ()=>{ clearInterval(timerInterval); next(); };
+        optDiv.appendChild(btn);
+    });
+}
+
+function next(){
+    index++;
+    if(index < questions.length){
+        loadQuestion();
+    } else {
+        document.getElementById("quizScreen").innerHTML = "<h1>Fim!</h1>";
+    }
+}
+</script>
+
+</body>
+</html>
